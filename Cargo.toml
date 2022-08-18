@@ -1,0 +1,11 @@
+[package]
+name = "launcher"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+locenv = "0.6"
+locenv-macros = "0.6"
