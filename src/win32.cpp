@@ -68,6 +68,8 @@ static std::unique_ptr<wchar_t[]> from_utf8(const std::string &utf8)
 
 process launcher::launch()
 {
+	auto bin = from_utf8(binary);
+
 	// Setup child creation.
 	STARTUPINFOW si;
 
@@ -100,26 +102,21 @@ process launcher::launch()
 	BOOL res;
 	PROCESS_INFORMATION pi;
 
-	__try {
-		auto bin = from_utf8(binary);
-		auto wd = working_directory.c_str();
+	res = CreateProcessW(
+		bin.get(),
+		nullptr,
+		nullptr,
+		nullptr,
+		TRUE,
+		CREATE_UNICODE_ENVIRONMENT,
+		nullptr,
+		working_directory.c_str(),
+		&si,
+		&pi);
 
-		res = CreateProcessW(
-			bin.get(),
-			nullptr,
-			nullptr,
-			nullptr,
-			TRUE,
-			CREATE_UNICODE_ENVIRONMENT,
-			nullptr,
-			wd,
-			&si,
-			&pi);
-	} __finally {
-		CloseHandle(si.hStdError);
-		CloseHandle(si.hStdOutput);
-		CloseHandle(si.hStdInput);
-	}
+	CloseHandle(si.hStdError);
+	CloseHandle(si.hStdOutput);
+	CloseHandle(si.hStdInput);
 
 	if (!res) {
 		throw std::system_error(GetLastError(), std::system_category());

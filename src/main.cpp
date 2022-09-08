@@ -46,13 +46,13 @@ static int spawn(lua lua)
 static int loader(lua lua)
 {
 	static const std::array functions{
-		lua_reg{ .name = "spawn", .func = spawn },
-		lua_reg{ .name = nullptr, .func = nullptr }
+		lua_reg{ "spawn", spawn },
+		lua_reg{ nullptr, nullptr }
 	};
 
 	// More information about 'loader': https://www.lua.org/manual/5.4/manual.html#6.3
 	// The loader data is locenv::context (the actual object is stored within Lua userdata).
-	api->lua_createtable(lua, 0, functions.size() - 1);
+	api->lua_createtable(lua, 0, static_cast<int>(functions.size()) - 1);
 	api->lua_pushvalue(lua, 2); // Push the loader data as upvalue for all functions in `functions`.
 	api->aux_setfuncs(lua, functions.data(), 1);
 
