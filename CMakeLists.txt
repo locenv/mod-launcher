@@ -7,7 +7,7 @@ set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 
 add_subdirectory(mdl)
 
-add_library(${CMAKE_PROJECT_NAME} MODULE src/launcher.cpp src/main.cpp)
+add_library(${CMAKE_PROJECT_NAME} SHARED src/launcher.cpp src/main.cpp)
 
 if(WIN32)
 	target_sources(${CMAKE_PROJECT_NAME} PRIVATE src/win32.cpp)
