@@ -11,13 +11,19 @@ jobs:
         os: [ubuntu-20.04, macos-11, windows-2022]
         include:
         - os: ubuntu-20.04
+          cmake: cmake -B build -D CMAKE_BUILD_TYPE=Release
+          build: cmake --build build
           binary: build/liblauncher.so
           artifact: amd64-linux
         - os: macos-11
+          cmake: cmake -B build -D CMAKE_BUILD_TYPE=Release
+          build: cmake --build build
           binary: build/liblauncher.dylib
           artifact: amd64-darwin
         - os: windows-2022
-          binary: build/launcher.dll
+          cmake: cmake -B build
+          build: cmake --build build --config Release
+          binary: build/Release/launcher.dll
           artifact: amd64-win32
     runs-on: ${{ matrix.os }}
     steps:
@@ -26,9 +32,9 @@ jobs:
       with:
         submodules: 'recursive'
     - name: Run CMake
-      run: cmake -B build -D CMAKE_BUILD_TYPE=Release
+      run: ${{ matrix.cmake }}
     - name: Build
-      run: cmake --build build
+      run: ${{ matrix.build }}
     - name: Upload module binary
       uses: actions/upload-artifact@v3
       with:
