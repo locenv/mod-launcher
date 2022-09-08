@@ -16,7 +16,9 @@ jobs:
     steps:
     - name: Checkout source
       uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+    - name: Run CMake
+      run: cmake -B build
     - name: Build
-      run: cargo build
-    - name: Run tests
-      run: cargo test
+      run: cmake --build build

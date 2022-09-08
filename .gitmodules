@@ -1,0 +1,3 @@
+[submodule "mdl"]
+	path = mdl
+	url = https://github.com/locenv/mdl-cpp.git

@@ -11,20 +11,24 @@ jobs:
         os: [ubuntu-20.04, macos-11, windows-2022]
         include:
         - os: ubuntu-20.04
-          binary: target/release/liblauncher.so
+          binary: build/liblauncher.so
           artifact: amd64-linux
         - os: macos-11
-          binary: target/release/liblauncher.dylib
+          binary: build/liblauncher.dylib
           artifact: amd64-darwin
         - os: windows-2022
-          binary: target/release/launcher.dll
+          binary: build/launcher.dll
           artifact: amd64-win32
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout source
       uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+    - name: Run CMake
+      run: cmake -B build -D CMAKE_BUILD_TYPE=Release
     - name: Build
-      run: cargo build -r
+      run: cmake --build build
     - name: Upload module binary
       uses: actions/upload-artifact@v3
       with:
